@@ -2,6 +2,18 @@
 
 A charting platform that runs only on your own Windows computer, reads your MetaTrader 5 terminal and shows your own trades on the chart. It was built with an AI coding agent for the Hello Purple article [Your own charting platform, built by an agent, on your broker's data](https://hello-purple.com/reports/build-your-own-charting-platform/), and it's meant as a base for you to build on.
 
+## Quick start with a coding agent
+
+1. On Windows, open your **MetaTrader 5 desktop terminal** and log in.
+2. On this page, click the green **Code** button, then **Download ZIP**, and **unzip** it into a folder.
+3. Open that folder with a coding agent that runs on your computer (for example Claude Code) and paste this:
+
+```
+Install and start this charting platform for me by following README.md. First check whether Python 3.13 and Node.js are installed and tell me how to install them if they're missing. Then create the Python environment, install the packages, run .\run-tests.cmd and only start the platform with .\start.cmd when every test passes. Explain each step in one plain sentence. Never call a function that can place, change or close an order.
+```
+
+The platform opens in your browser at http://127.0.0.1:8765. A chat in the browser can't do this for you: the platform has to run on the same Windows computer as your MT5 terminal.
+
 ## What it does
 
 - Candlestick charts on every MT5 timeframe from 5 seconds to a month, for every symbol your broker offers, with volume, SMA, EMA, Bollinger Bands, RSI, MACD and the broker's spread.
