@@ -1,0 +1,13 @@
+Hello Purple Charts
+Copyright 2026 Purple Technology s.r.o.
+
+This product is licensed under the Apache License, Version 2.0 (see LICENSE).
+
+This product uses TradingView Lightweight Charts(TM), installed from npm as the
+"lightweight-charts" package (Apache License, Version 2.0):
+
+TradingView Lightweight Charts(TM)
+Copyright (c) 2025 TradingView, Inc. https://www.tradingview.com/
+
+The attribution logo on every chart and the notice in the page footer must stay
+visible in any version of this product that you share or publish.

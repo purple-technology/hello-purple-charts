@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#FDF8E8">
+  <title>hello.purple charts</title>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/style.css">
+  <script src="/theme.js"></script>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <span class="wordmark" aria-label="hello.purple"><span class="lo-hello">hello</span><span class="lo-dot">.</span><span class="lo-purple">purple</span></span>
+      <span class="tag">Charts</span>
+    </div>
+    <div class="instrument">
+      <label class="sr-only" for="symbol">Symbol of the selected chart</label>
+      <select id="symbol" class="symbol-select"></select>
+      <div class="seg" id="timeframes" role="group" aria-label="Timeframe of the selected chart"></div>
+    </div>
+    <div class="spacer"></div>
+    <canvas id="plate" class="plate" role="img" aria-label="Dot-matrix plate of the selected chart"></canvas>
+    <div class="topbar-right">
+      <div class="seg" role="group" aria-label="Theme">
+        <button type="button" data-theme-choice="paper">Paper</button>
+        <button type="button" data-theme-choice="midnight">Midnight</button>
+      </div>
+    </div>
+  </header>
+
+  <nav class="toolbar" aria-label="Tools">
+    <div class="tgroup">
+      <span class="overline">View</span>
+      <select id="layout" aria-label="Number of charts">
+        <option value="1">1 chart</option>
+        <option value="2">2 side by side</option>
+        <option value="2v">2 stacked</option>
+        <option value="4">4 charts</option>
+      </select>
+      <label title="Changing the symbol changes it in every chart"><input type="checkbox" id="link-symbols" checked> Link</label>
+      <button id="reload" type="button" title="Reload the latest data from MetaTrader 5">↻ Reload</button>
+    </div>
+
+    <div class="tgroup">
+      <span class="overline">Study</span>
+      <div class="menu">
+        <button id="indicators-btn" type="button" aria-expanded="false" aria-controls="indicators-panel">Indicators ▾</button>
+        <div id="indicators-panel" class="panel" hidden></div>
+      </div>
+    </div>
+
+    <div class="tgroup" role="group" aria-label="Drawing tools">
+      <span class="overline">Draw</span>
+      <button type="button" data-tool="trend" title="Trend line: click start, click end">╱ Trend</button>
+      <button type="button" data-tool="hline" title="Horizontal line: one click">― Line</button>
+      <button type="button" data-tool="rect" title="Rectangle: click one corner, then the opposite corner">▭ Box</button>
+      <button type="button" data-tool="erase" title="Eraser: click a drawing to delete it">⌫ Erase</button>
+      <input type="color" id="draw-color" value="#7c3aed" aria-label="Drawing colour">
+      <button type="button" id="clear-drawings" title="Delete all drawings on this symbol">Clear</button>
+    </div>
+
+    <div class="tgroup">
+      <span class="overline">Review</span>
+      <label title="Show your positions: entry-exit path, risk and target"><input type="checkbox" id="show-trades" checked> Trades</label>
+      <button id="journal-btn" type="button" aria-pressed="false">Journal</button>
+      <button id="replay-btn" type="button" aria-pressed="false" title="Replay the market candle by candle, with your trades">⏵ Replay</button>
+    </div>
+
+    <div class="tgroup">
+      <div class="menu">
+        <button id="alerts-btn" type="button" aria-expanded="false" aria-controls="alerts-panel">Alerts <span id="alerts-count" class="count"></span> ▾</button>
+        <div id="alerts-panel" class="panel wide" hidden></div>
+      </div>
+      <div class="menu">
+        <button id="export-btn" type="button" aria-expanded="false" aria-controls="export-panel">Export ▾</button>
+        <div id="export-panel" class="panel" hidden>
+          <h4 class="overline">Download</h4>
+          <button type="button" id="export-chart" class="item">Chart data of the selected chart (CSV)</button>
+          <button type="button" id="export-journal" class="item">Journal: all trades (CSV)</button>
+          <p class="note">Prices, times, volumes, R and points only. No money amounts.</p>
+        </div>
+      </div>
+    </div>
+
+    <span id="status" class="status" role="status"></span>
+  </nav>
+
+  <div class="replaybar" id="replaybar" hidden>
+    <span class="overline">Replay</span>
+    <span id="replay-time" class="rtime"></span>
+    <button type="button" id="rp-back" title="One candle back (←)">⏴</button>
+    <button type="button" id="rp-play" title="Play / pause (space)">⏵ Play</button>
+    <button type="button" id="rp-step" title="One candle forward (→)">⏵|</button>
+    <button type="button" id="rp-next" title="Jump to your next trade">Next trade ⇥</button>
+    <label>Speed
+      <select id="rp-speed" aria-label="Replay speed">
+        <option value="1">1 / s</option><option value="3" selected>3 / s</option>
+        <option value="10">10 / s</option><option value="30">30 / s</option>
+      </select>
+    </label>
+    <button type="button" id="rp-stop" title="End replay">⏹ End</button>
+    <span class="note">Only closed candles are shown. Your trades appear when they happened.</span>
+  </div>
+
+  <div class="main">
+    <main id="views" class="views layout-1"></main>
+    <aside id="journal" class="journal" hidden aria-label="Journal"></aside>
+  </div>
+
+  <div id="toasts" class="toasts" aria-live="polite"></div>
+
+  <footer class="footer">
+    <span class="key">Broker server time · <b class="buy">▲ your buys</b> · <b class="sell">▼ your sells</b> · hollow candle = rising, filled = falling · Esc cancels a drawing</span>
+    <span>TradingView Lightweight Charts™ Copyright (c) 2025 TradingView, Inc.
+      <a href="https://www.tradingview.com" target="_blank" rel="noopener noreferrer">https://www.tradingview.com</a></span>
+  </footer>
+
+  <script src="/vendor/lightweight-charts.js"></script>
+  <script src="/indicators.js"></script>
+  <script src="/drawmath.js"></script>
+  <script src="/csv.js"></script>
+  <script src="/stats.js"></script>
+  <script src="/alerts.js"></script>
+  <script src="/drawings.js"></script>
+  <script src="/tradelines.js"></script>
+  <script src="/chartview.js"></script>
+  <script src="/journal.js"></script>
+  <script src="/app.js"></script>
+</body>
+</html>

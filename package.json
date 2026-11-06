@@ -1,0 +1,10 @@
+{
+    "name":  "hello-purple-charts",
+    "version":  "1.0.0",
+    "private":  true,
+    "description":  "Local-only MetaTrader 5 charting platform with your own trades (TradingView Lightweight Charts v5)",
+    "dependencies":  {
+                         "lightweight-charts":  "5.2.1"
+                     },
+    "license":  "Apache-2.0"
+}
